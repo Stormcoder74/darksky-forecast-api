@@ -30,7 +30,7 @@ import static tk.plogitech.darksky.forecast.util.Assert.notNull;
 /**
  * Represents the Request-Timeouts of a Forecast-request.
  *
- * @author Philipp-André Plogmann
+ * @authorPuls
  */
 public class Timeouts {
 

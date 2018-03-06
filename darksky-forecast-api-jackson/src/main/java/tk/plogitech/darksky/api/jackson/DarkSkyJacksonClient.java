@@ -42,7 +42,7 @@ import tk.plogitech.darksky.forecast.GeoCoordinates;
 import tk.plogitech.darksky.forecast.model.Forecast;
 import tk.plogitech.darksky.forecast.model.Latitude;
 import tk.plogitech.darksky.forecast.model.Longitude;
-import static tk.plogitech.darksky.util.Assert.notNull;
+import static tk.plogitech.darksky.forecast.util.Assert.notNull;
 
 /**
  * Client to fetch weather data from the DarkSky API which uses the Jackson library to parse the JSON response into JavaBean objects.

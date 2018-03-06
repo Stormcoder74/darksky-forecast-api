@@ -21,12 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package tk.plogitech.darksky.util;
+package tk.plogitech.darksky.forecast.util;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
-import static tk.plogitech.darksky.util.Assert.notNull;
+import static tk.plogitech.darksky.forecast.util.Assert.notNull;
 
 /**
  * Utility for IO related tasks.

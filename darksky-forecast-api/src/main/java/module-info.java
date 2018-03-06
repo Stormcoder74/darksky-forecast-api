@@ -25,5 +25,5 @@ module tk.plogitech.darksky {
     requires java.logging;
     exports tk.plogitech.darksky.forecast;
     exports tk.plogitech.darksky.forecast.model;
-    exports tk.plogitech.darksky.util to tk.plogitech.darksky.jackson;
+    exports tk.plogitech.darksky.forecast.util to tk.plogitech.darksky.jackson;
 }
