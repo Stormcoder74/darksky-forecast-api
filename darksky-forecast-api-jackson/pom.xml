@@ -43,6 +43,12 @@
 	<plugins>
 	    <plugin>
 		<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-compiler-plugin</artifactId>
+		<version>3.7.0</version>
+	    </plugin>
+
+	    <plugin>
+		<groupId>org.apache.maven.plugins</groupId>
 		<artifactId>maven-jar-plugin</artifactId>
 		<version>3.0.2</version>
 		<configuration>
@@ -57,8 +63,7 @@
 		    </archive>
 		</configuration>
 	    </plugin>
-	    
-	    
+	  
 	    <plugin>
 		<artifactId>maven-javadoc-plugin</artifactId>
 		<version>3.0.0</version>
@@ -103,28 +108,7 @@
 	    <email>plogitech200@gmail.com</email>
 	</developer>
     </developers>
-    <build>
-	<plugins>
-	    <plugin>
-		<groupId>org.apache.maven.plugins</groupId>
-		<artifactId>maven-compiler-plugin</artifactId>
-		<version>3.7.0</version>
-	    </plugin>
-	    <plugin>
-		<groupId>org.apache.maven.plugins</groupId>
-		<artifactId>maven-jar-plugin</artifactId>
-		<version>3.0.2</version>
-		<configuration>
-		    <archive>
-			<index>true</index>
-			<manifest>
-			    <addClasspath>true</addClasspath>
-			</manifest>
-		    </archive>
-		</configuration>
-	    </plugin>
-	</plugins>
-    </build>
+
     <distributionManagement>
 	<snapshotRepository>
 	    <id>ossrh</id>
