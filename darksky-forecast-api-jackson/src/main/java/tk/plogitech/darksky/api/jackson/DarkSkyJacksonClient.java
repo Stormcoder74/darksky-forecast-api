@@ -23,12 +23,15 @@
  */
 package tk.plogitech.darksky.api.jackson;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.core.JsonParser;
 import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES;
 import static com.fasterxml.jackson.databind.MapperFeature.AUTO_DETECT_GETTERS;
 import static com.fasterxml.jackson.databind.MapperFeature.REQUIRE_SETTERS_FOR_GETTERS;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import static com.fasterxml.jackson.databind.SerializationFeature.INDENT_OUTPUT;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import java.io.IOException;
 import java.io.InputStream;
 import static java.util.logging.Level.FINE;
@@ -45,7 +48,8 @@ import tk.plogitech.darksky.forecast.model.Longitude;
 import static tk.plogitech.darksky.forecast.util.Assert.notNull;
 
 /**
- * Client to fetch weather data from the DarkSky API which uses the Jackson library to parse the JSON response into JavaBean objects.
+ * Client to fetch weather data from the DarkSky API which uses the Jackson
+ * library to parse the JSON response into JavaBean objects.
  *
  * @author Puls
  */
@@ -57,48 +61,51 @@ public class DarkSkyJacksonClient extends DarkSkyClient {
     /**
      * Returns the forecast as {@link Forecast} object parsed by Jackson.
      *
-     * @param request The Forecast Request which is executed. Use {@link ForecastRequestBuilder} to build the request.
+     * @param request The Forecast Request which is executed. Use
+     * {@link ForecastRequestBuilder} to build the request.
      * @return The forecast parsed as {@link Forecast}.
      *
      * @throws ForecastException if the forecast cannot be fetched.
      */
     public Forecast forecast(ForecastRequest request) throws ForecastException {
-	notNull("The ForecastRequest cannot be null.", request);
-	logger.log(FINE, "Executing Forecat request: {0}", request);
+        notNull("The ForecastRequest cannot be null.", request);
+        logger.log(FINE, "Executing Forecat request: {0}", request);
 
-	try (InputStream is = executeForecastRequest(request)) {
-	    return mapper.readValue(is, Forecast.class);
+        try (InputStream is = executeForecastRequest(request)) {
+            return mapper.readValue(is, Forecast.class);
 
-	} catch (IOException e) {
-	    throw new ForecastException("Forecast cannot be fetched.", e);
-	}
+        } catch (IOException e) {
+            throw new ForecastException("Forecast cannot be fetched.", e);
+        }
     }
 
-    private static ObjectMapper objectMapper() {
-	ObjectMapper result = new ObjectMapper();
-	result.registerModule(new JavaTimeModule());
-	result.configure(REQUIRE_SETTERS_FOR_GETTERS, false);
-	result.configure(AUTO_DETECT_GETTERS, true);
-	result.configure(INDENT_OUTPUT, true);
-	result.configure(FAIL_ON_UNKNOWN_PROPERTIES, false);
-	return result;
+    static ObjectMapper objectMapper() {
+        ObjectMapper result = new ObjectMapper();
+        result.registerModule(new JavaTimeModule());
+        result.enable(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES);
+        result.registerModule(new ParameterNamesModule(JsonCreator.Mode.PROPERTIES));
+        result.configure(REQUIRE_SETTERS_FOR_GETTERS, false);
+        result.configure(AUTO_DETECT_GETTERS, true);
+        result.configure(INDENT_OUTPUT, true);
+        result.configure(FAIL_ON_UNKNOWN_PROPERTIES, false);
+        return result;
     }
 
     public static void main(String[] args) throws ForecastException {
-	if (args.length != 3) {
-	    System.err.println("Please provide yout API-Key and a Longitude / Latitrude combination. Usage as follows: '<your-secret-key> <longitude> <latitude>");
-	    System.exit(1);
-	}
-	String apikey = args[0];
-	String latitude = args[1];
-	String longitude = args[2];
+        if (args.length != 3) {
+            System.err.println("Please provide yout API-Key and a Longitude / Latitrude combination. Usage as follows: '<your-secret-key> <longitude> <latitude>");
+            System.exit(1);
+        }
+        String apikey = args[0];
+        String latitude = args[1];
+        String longitude = args[2];
 
-	ForecastRequest request = new ForecastRequestBuilder()
-		.key(new APIKey(apikey))
-		.location(new GeoCoordinates(new Longitude(Double.valueOf(latitude)), new Latitude(Double.valueOf(longitude)))).build();
+        ForecastRequest request = new ForecastRequestBuilder()
+                .key(new APIKey(apikey))
+                .location(new GeoCoordinates(new Longitude(Double.valueOf(latitude)), new Latitude(Double.valueOf(longitude)))).build();
 
-	DarkSkyJacksonClient client = new DarkSkyJacksonClient();
-	Forecast forecast = client.forecast(request);
-	System.out.println("The current weather: " + forecast.getCurrently().getSummary());
+        DarkSkyJacksonClient client = new DarkSkyJacksonClient();
+        Forecast forecast = client.forecast(request);
+        System.out.println("The current weather: " + forecast.getCurrently().getSummary());
     }
 }

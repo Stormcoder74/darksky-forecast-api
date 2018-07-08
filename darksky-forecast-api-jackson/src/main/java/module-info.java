@@ -23,11 +23,12 @@
  */
 module tk.plogitech.darksky.jackson {
     exports tk.plogitech.darksky.api.jackson;
-    
+
     requires java.logging;
     requires tk.plogitech.darksky;
     requires com.fasterxml.jackson.annotation;
     requires com.fasterxml.jackson.core;
     requires com.fasterxml.jackson.databind;
     requires com.fasterxml.jackson.datatype.jsr310;
+    requires com.fasterxml.jackson.module.paramnames;
 }
